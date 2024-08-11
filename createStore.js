@@ -1,4 +1,4 @@
-import { createStore } from 'redux';
+import { createStore, bindActionCreators } from 'redux';
 
 const ADD_TODO = 'add_todo';
 const DEL_TODO = 'delete_todo';
@@ -31,6 +31,33 @@ const { dispatch, subscribe, getState, replaceReducer } = createStore(todoReduce
 
 subscribe(() => console.log(getState()));
 
-dispatch({ type: ADD_TODO, payload: { todoText: 'todo 1' } });
-dispatch({ type: ADD_TODO, payload: { todoText: 'todo 2' } });
-dispatch({ type: DEL_TODO, payload: { todoId: 1 } });
+// dispatch({ type: ADD_TODO, payload: { todoText: 'todo 1' } });
+// dispatch({ type: ADD_TODO, payload: { todoText: 'todo 2' } });
+
+/**
+ *  action object -> action methods (action creator)
+ * */ 
+const addTodo = (todoText) => ({ type: ADD_TODO, payload: {todoText} });
+const deleteTodo = (id) => ({ type: DEL_TODO, payload: { todoId: id } })
+
+// dispatch(addTodo('todo 1'))
+// dispatch(addTodo('todo 2'))
+
+// dispatch(deleteTodo(2));
+
+
+/**
+ * bindActionCreator
+*/
+
+const actions = bindActionCreators({ addTodo, deleteTodo }, dispatch);
+
+/**
+ * Inside bindActionCreators method whatever we had written it is same as ->   dispatch(addTodo('todo 1'))
+                                                                               dispatch(addTodo('todo 2'))
+                                                                               dispatch(deleteTodo(2));
+ */
+
+actions.addTodo('todo 3');
+actions.addTodo('todo 4');
+actions.deleteTodo(1);
